@@ -4,7 +4,7 @@ import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.restpack.RestPackIgnore;
 
 import java.util.Date;
-
+@ApiComment(value = "用户表")
 public class User {
 
     @ApiComment(value = "用户id", sample = "123")

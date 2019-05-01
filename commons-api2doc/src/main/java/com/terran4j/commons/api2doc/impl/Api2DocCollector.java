@@ -22,14 +22,12 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
+import java.lang.reflect.*;
 import java.util.*;
 
 
@@ -236,7 +234,13 @@ public class Api2DocCollector implements BeanPostProcessor {
             Class<?> defaultSeeClass) throws BusinessException {
 
         Method method = mappingMethod.getMethod();
+        if ("UserController".equalsIgnoreCase(beanName)) {
+            System.out.println(beanName);
 
+        }
+        if (Arrays.asList(basePaths).contains("/api2doc/demo")) {
+            System.out.println(basePaths);
+        }
         // 只要有 @ApiDoc 注解（无论是本方法上，还是类上），有会生成文档，没有这个注解就不会。
         Api2Doc api2Doc = method.getAnnotation(Api2Doc.class);
         if (api2Doc == null && classApi2Doc == null) {
@@ -249,6 +253,9 @@ public class Api2DocCollector implements BeanPostProcessor {
 
         // 获取文档的 id，以 @Api2Doc、方法名 为顺序获取。
         String id = method.getName();
+        if ("responseBody".equalsIgnoreCase(id)) {
+            System.out.println("---");
+        }
         if (api2Doc != null && StringUtils.hasText(api2Doc.value())) {
             id = api2Doc.value();
         }
@@ -374,6 +381,9 @@ public class Api2DocCollector implements BeanPostProcessor {
                         if (paramIds.contains(paramFromClass.getId())) {
                             continue;
                         }
+                        if (param.getAnnotation(RequestBody.class) != null) {
+                            paramFromClass.setLocation(ApiParamLocation.RequestBody);
+                        }
                         paramIds.add(paramFromClass.getId());
                         result.add(paramFromClass);
                     }
@@ -497,6 +507,8 @@ public class Api2DocCollector implements BeanPostProcessor {
 
         ApiComment apiComment = element.getAnnotation(ApiComment.class);
         ApiCommentUtils.setApiComment(apiComment, defaultSeeClass, apiParamObject);
+        //设置枚举
+        apiParamObject.insertComment(ApiResultObject.getEnumComment(elementType));
 
         apiParamObject.setSourceType(elementType);
 

@@ -4,8 +4,10 @@ import com.terran4j.commons.api2doc.Api2DocMocker;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.api2doc.annotations.ApiError;
+import com.terran4j.test.api2doc.Api2DocCollectorTest;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Api2Doc(id = "demo", name = "演示Api2Doc基本用法", order = 0)
@@ -60,6 +62,11 @@ public class UserController {
     @RequestMapping(name = "删除指定用户",
             value = "/user/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") Long id) {
+    }
+    @ApiComment(value = "根据requestBody 查询时间",seeClass = User.class)
+    @PostMapping(value = "/user/body")
+    public User responseBody(@RequestBody User user) {
+        return null;
     }
 
 }

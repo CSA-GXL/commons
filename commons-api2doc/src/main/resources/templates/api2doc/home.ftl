@@ -43,6 +43,7 @@
     </#if>
         <div class="doc-title">
             <span>${title}</span>
+            <a>aaa</a>
         </div>
         <div class="doc-end"></div>
     </div>

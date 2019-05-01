@@ -1,11 +1,14 @@
 package com.terran4j.commons.api2doc.domain;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 
 public class DateConverter {
 
     public static boolean isDateType(Class<?> clazz) {
-        return clazz == Date.class || clazz == java.sql.Date.class;
+        return Arrays.asList(Date.class , java.sql.Date.class,LocalDateTime.class,LocalDate.class).contains(clazz);
     }
 
     public static Object dateAsLongValue(Class<?> clazz) {

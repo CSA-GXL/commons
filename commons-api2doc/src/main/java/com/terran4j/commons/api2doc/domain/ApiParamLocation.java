@@ -154,10 +154,26 @@ public enum ApiParamLocation {
 
             return true;
         }
+    },
+    RequestBody {
+        @Override
+        boolean doCollect(ApiParamObject apiParamObject, AnnotatedElement element) {
+            RequestBody requestBody = element.getAnnotation(RequestBody.class);
+            if (requestBody == null) {
+                return false;
+            }
+
+            apiParamObject.setName("哈哈哈哈");
+
+            boolean required = requestBody.required();
+            apiParamObject.setRequired(required);
+
+            return true;
+        }
     };
 
     public static final ApiParamLocation[] API_PARAM_LOCATIONS = new ApiParamLocation[]{
-            RequestParam, PathVariable, RequestHeader, CookieValue, RequestPart
+            RequestParam, PathVariable, RequestHeader, CookieValue, RequestPart,RequestBody
     };
 
     abstract boolean doCollect(ApiParamObject apiParamObject, AnnotatedElement param);

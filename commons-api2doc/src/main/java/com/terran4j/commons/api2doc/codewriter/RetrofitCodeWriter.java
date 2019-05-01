@@ -263,6 +263,8 @@ public class RetrofitCodeWriter {
     private String toParamAnnoName(ApiParamLocation location, RequestMethod requestMethod) {
         if (location == ApiParamLocation.RequestHeader) {
             return "Header";
+        } else if (location == ApiParamLocation.RequestBody) {
+            return "RequestBody";
         } else if (location == ApiParamLocation.PathVariable) {
             return "Path";
         } else if (location == ApiParamLocation.RequestParam) {
