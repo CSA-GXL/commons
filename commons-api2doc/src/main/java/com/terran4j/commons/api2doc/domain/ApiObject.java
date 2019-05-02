@@ -44,6 +44,9 @@ public class ApiObject implements Comparable<ApiObject>{
     public void insertComment(String comment) {
         this.comment.insertLine(comment);
     }
+    public void appendComment(String appendComment) {
+        this.comment.append(appendComment);
+    }
 
     public FlexibleString getComment() {
         return comment;
@@ -82,4 +85,6 @@ public class ApiObject implements Comparable<ApiObject>{
         // 其次按 id 字符串排序。
         return o1.getId().compareTo(o2.getId());
     }
+
+
 }

@@ -48,6 +48,7 @@ public class Api2DocCollector implements BeanPostProcessor {
         try {
             folder = toApiFolder(bean, beanName);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new BeanDefinitionStoreException(
                     "bean上的文档信息定义出错：" + e.getMessage());
         }
@@ -507,8 +508,7 @@ public class Api2DocCollector implements BeanPostProcessor {
         ApiComment apiComment = element.getAnnotation(ApiComment.class);
         ApiCommentUtils.setApiComment(apiComment, defaultSeeClass, apiParamObject);
         //设置枚举
-        apiParamObject.insertComment(ApiResultObject.getEnumComment(elementType));
-
+        apiParamObject.appendComment(ApiResultObject.getEnumComment(elementType));
         apiParamObject.setSourceType(elementType);
 
         ApiDataType dataType = convertType(elementType);

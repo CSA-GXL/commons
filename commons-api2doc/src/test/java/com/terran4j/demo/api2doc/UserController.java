@@ -1,5 +1,6 @@
 package com.terran4j.demo.api2doc;
 
+import com.sun.corba.se.spi.ior.ObjectKey;
 import com.terran4j.commons.api2doc.Api2DocMocker;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
@@ -7,8 +8,11 @@ import com.terran4j.commons.api2doc.annotations.ApiError;
 import com.terran4j.test.api2doc.Api2DocCollectorTest;
 import org.springframework.web.bind.annotation.*;
 
+import javax.jws.soap.SOAPBinding;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Api2Doc(id = "demo", name = "演示Api2Doc基本用法", order = 0)
 @ApiComment(seeClass = User.class)
@@ -63,10 +67,12 @@ public class UserController {
             value = "/user/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") Long id) {
     }
-    @ApiComment(value = "根据requestBody 查询时间",seeClass = User.class,resultClass = User2.class)
+    @ApiComment(value = "根据requestBody 查询时间")
     @PostMapping(value = "/user/body")
-    public ApiResultBean<User> responseBody(@RequestBody User user) {
-
+    public ApiResultBean<ApiResultBean2<ApiResultBean3<Map<String,User>>>> responseBody(@RequestBody User user) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("aa", 1);
+        System.out.println(map);
         return null;
     }
 

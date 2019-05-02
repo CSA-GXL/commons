@@ -14,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -243,16 +240,8 @@ public class ApiResultObject extends ApiObject {
         Type genericReturnType = method.getGenericReturnType();
         Map<Class<?>, PropertyDescriptor[]> propMap = new HashMap<>();
         propMap.put(elementType, props);
-        if (genericReturnType instanceof ParameterizedType) {
-            Type[] actualTypeArguments = ((ParameterizedType) genericReturnType).getActualTypeArguments();
-            for (Type type2 : actualTypeArguments) {
-                PropertyDescriptor[] temp = PropertyUtils.getPropertyDescriptors((Class<?>) type2);
-                if (temp != null && temp.length != 0) {
-                    //存储
-                    propMap.put((Class<?>) type2, temp);
-                }
-            }
-        }
+        //解析泛型
+        parseParameterizedType(genericReturnType,propMap);
         ApiComment annotation = method.getAnnotation(ApiComment.class);
         if (annotation != null) {
             for (Class<?> resultClass : annotation.resultClass()) {
@@ -368,6 +357,45 @@ public class ApiResultObject extends ApiObject {
         Collections.sort(result.getChildren());
 
         return result;
+    }
+
+    /**
+     * @param type :
+     *
+     * @Author : GXL
+     * @Desc : 解析泛型
+     * @Date : 2019/5/2
+     * @Return : void
+     */
+    public static void parseParameterizedType(Type type,Map<Class<?>, PropertyDescriptor[]> propMap) {
+
+        if (type instanceof ParameterizedType) {
+            ParameterizedType type1 = (ParameterizedType) type;
+            //存储实际类型
+            Class<?> rawType = (Class<?>) type1.getRawType();
+            if (rawType != null&&!rawType.isAssignableFrom(List.class)&&!rawType.isAssignableFrom(Map.class)) {
+                PropertyDescriptor[] temp1 = PropertyUtils.getPropertyDescriptors(rawType);
+                if (temp1 != null && temp1.length != 0) {
+                    //存储
+                    propMap.put((Class<?>)type1.getRawType(), temp1);
+                }
+            }
+
+            //继续解析泛型
+            Type[] actualTypeArguments = type1.getActualTypeArguments();
+            for (Type type2 : actualTypeArguments) {
+                parseParameterizedType(type2, propMap);
+            }
+        }else if(type instanceof GenericArrayType){
+            //泛型数组,获取泛型继续解析
+           parseParameterizedType(((GenericArrayType) type).getGenericComponentType(),propMap);
+        } else if (type instanceof Class) {
+            ApiDataType dataType = ApiDataType.toDataType((Class<?>)type);
+            if (!dataType.isSimpleType()) {
+                propMap.put((Class<?>)type, PropertyUtils.getPropertyDescriptors((Class<?>)type));
+            }
+
+        }
     }
 
     public static final String getGroupId(Class<?> clazz) {

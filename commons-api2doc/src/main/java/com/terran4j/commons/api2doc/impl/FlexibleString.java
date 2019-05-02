@@ -42,7 +42,7 @@ public class FlexibleString {
     public FlexibleString insertLine(String insertValue) {
         if (insertValue != null) {
             if (this.value.length() > 0) {
-                this.value.insert(0, insertValue + "\n");
+                this.value.insert(0, insertValue);
             } else {
                 this.value.insert(0, insertValue);
             }

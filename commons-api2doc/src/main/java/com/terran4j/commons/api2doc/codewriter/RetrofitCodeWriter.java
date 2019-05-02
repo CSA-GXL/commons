@@ -264,7 +264,7 @@ public class RetrofitCodeWriter {
         if (location == ApiParamLocation.RequestHeader) {
             return "Header";
         } else if (location == ApiParamLocation.RequestBody) {
-            return "RequestBody";
+            return "application/json";
         } else if (location == ApiParamLocation.PathVariable) {
             return "Path";
         } else if (location == ApiParamLocation.RequestParam) {

@@ -1,28 +1,38 @@
 package com.terran4j.commons.api2doc.impl;
 
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
+import java.lang.reflect.*;
 import java.util.List;
 import java.util.Map;
 
 public class TypeArguments<T> {
+    public T result;
     public TypeArguments(){}
     public <E> TypeArguments(E e){}
     public Map<T, String> genericField;
     public <B> Map<Integer, String>[] genericMethod(List<? extends Integer> list, List<String> list2, String str, B[] tArr) throws IOException, NoSuchMethodException{
         return null;
     }
+    public TypeArguments<String> resultMethod(){
+        return null;
+    }
+
 
     public static void main(String[] args) throws Exception {
         Class<?> clazz = TypeArguments.class;
+        System.out.println("0000");
+        Method resultMethod = clazz.getMethod("resultMethod");
+        Type genericReturnTyp1 = resultMethod.getGenericReturnType();
+        instanceActualTypeArguments(genericReturnTyp1);
+        Class<?> returnType = resultMethod.getReturnType();
 
+        Field result = returnType.getField("result");
+
+        Type genericType = result.getGenericType();
+
+        instanceActualTypeArguments(genericType);
         System.out.println("一．  成员变量类型的泛型参数");
         Field field = clazz.getField("genericField");
         Type fieldGenericType = field.getGenericType();
@@ -63,9 +73,13 @@ public class TypeArguments<T> {
         // 参数化类型
         if ( type instanceof ParameterizedType ) {
             Type[] typeArguments = ((ParameterizedType)type).getActualTypeArguments();
+            Type rawType = ((ParameterizedType) type).getRawType();
+            Type ownerType = ((ParameterizedType) type).getOwnerType();
+            String typeName = ((ParameterizedType) type).getTypeName();
             for (int i = 0; i < typeArguments.length; i++) {
                 // 类型变量
                 if(typeArguments[i] instanceof TypeVariable){
+                    AnnotatedType[] annotatedBounds = ((TypeVariable) typeArguments[i]).getAnnotatedBounds();
                     System.out.println("第" + (i+1) +  "个泛型参数类型是类型变量" + typeArguments[i] + "，无法实例化。");
                 }
                 // 通配符表达式
@@ -92,7 +106,8 @@ public class TypeArguments<T> {
                 instanceActualTypeArguments(componentType);
             }
         } else if( type instanceof TypeVariable){
-            System.out.println("该类型是类型变量");
+            GenericDeclaration genericDeclaration = ((TypeVariable) type).getGenericDeclaration();
+            System.out.println("该类型是类型变量--->"+genericDeclaration);
         }else if( type instanceof WildcardType){
             System.out.println("该类型是通配符表达式");
         } else if( type instanceof Class ){
