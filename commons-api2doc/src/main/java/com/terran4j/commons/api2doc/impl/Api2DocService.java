@@ -2,7 +2,7 @@ package com.terran4j.commons.api2doc.impl;
 
 import com.terran4j.commons.api2doc.domain.ApiDocObject;
 import com.terran4j.commons.api2doc.domain.ApiFolderObject;
-import com.terran4j.commons.util.value.KeyedList;
+import com.terran4j.commons.api2doc.other.utils.KeyedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

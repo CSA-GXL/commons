@@ -1,7 +1,7 @@
 package com.terran4j.demo.api2doc;
 
 import com.terran4j.commons.api2doc.config.EnableApi2Doc;
-import com.terran4j.commons.restpack.EnableRestPack;
+import com.terran4j.commons.api2doc.other.EnableRestPack;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;

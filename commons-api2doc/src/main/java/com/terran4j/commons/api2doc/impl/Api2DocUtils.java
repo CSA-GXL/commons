@@ -6,12 +6,11 @@ import com.terran4j.commons.api2doc.domain.ApiDocObject;
 import com.terran4j.commons.api2doc.domain.ApiObject;
 import com.terran4j.commons.api2doc.domain.ApiParamLocation;
 import com.terran4j.commons.api2doc.domain.ApiParamObject;
-import com.terran4j.commons.restpack.RestPackIgnore;
-import com.terran4j.commons.util.Classes;
-import com.terran4j.commons.util.Encoding;
-import com.terran4j.commons.util.Strings;
-import com.terran4j.commons.util.error.BusinessException;
-import com.terran4j.commons.util.value.ValueSource;
+import com.terran4j.commons.api2doc.other.RestPackIgnore;
+import com.terran4j.commons.api2doc.other.utils.Classes;
+import com.terran4j.commons.api2doc.other.utils.Encoding;
+import com.terran4j.commons.api2doc.other.utils.Strings;
+import com.terran4j.commons.api2doc.other.value.ValueSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 

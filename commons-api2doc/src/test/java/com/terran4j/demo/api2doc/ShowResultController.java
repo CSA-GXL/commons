@@ -3,8 +3,9 @@ package com.terran4j.demo.api2doc;
 import com.terran4j.commons.api2doc.Api2DocMocker;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
-import com.terran4j.commons.restpack.RestPackController;
-import org.springframework.web.bind.annotation.*;
+import com.terran4j.commons.api2doc.other.RestPackController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.Date;

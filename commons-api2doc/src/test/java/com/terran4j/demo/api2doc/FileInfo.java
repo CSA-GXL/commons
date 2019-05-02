@@ -1,6 +1,6 @@
 package com.terran4j.demo.api2doc;
 
-import com.terran4j.commons.util.Strings;
+import com.terran4j.commons.api2doc.other.utils.Strings;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

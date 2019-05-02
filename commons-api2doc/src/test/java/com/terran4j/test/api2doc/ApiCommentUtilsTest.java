@@ -7,7 +7,7 @@ import com.terran4j.commons.api2doc.domain.ApiFolderObject;
 import com.terran4j.commons.api2doc.domain.ApiParamObject;
 import com.terran4j.commons.api2doc.impl.Api2DocCollector;
 import com.terran4j.commons.api2doc.impl.ApiCommentUtils;
-import com.terran4j.commons.util.Classes;
+import com.terran4j.commons.api2doc.other.utils.Classes;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,7 +63,7 @@ public class ApiCommentUtilsTest {
     @Test
     public void testSee() throws Exception {
         Api2DocCollector collector = new Api2DocCollector();
-        ApiFolderObject folder = collector.toApiFolder(new MyController(),"myController");
+        ApiFolderObject folder = collector.toApiFolder(new MyController(), "myController");
         ApiDocObject doc = folder.getDoc("updateUser");
         List<ApiParamObject> params = doc.getParams();
         Assert.assertEquals("用户id", params.get(0).getComment().toString());

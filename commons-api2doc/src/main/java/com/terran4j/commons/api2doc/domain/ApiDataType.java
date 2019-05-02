@@ -3,7 +3,7 @@ package com.terran4j.commons.api2doc.domain;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
-import com.terran4j.commons.util.Jsons;
+import com.terran4j.commons.api2doc.other.utils.Jsons;
 
 /**
  * api的基本数据类型。

@@ -9,26 +9,26 @@
     -->
     <meta charset="UTF-8" name="viewport"
           content="width=device-width,initial-scale=1,user-scalable=0"/>
-    <script src="/website/flexible-lite/flexible-lite-1.0.js"></script>
+    <script src="${basePath}/website/flexible-lite/flexible-lite-1.0.js"></script>
     <script type="text/javascript">
         flex(1000);
     </script>
 
     <!-- 左侧菜单是用 element-ui 写的，element-ui 又用了 vue，因此都要引用 -->
-    <link href="/website/element-ui/element-ui.min.css" rel="stylesheet">
-    <script src="/website/vue/vue-2.5.10.min.js"></script>
-    <script src="/website/element-ui/element-ui.min.js"></script>
+    <link href="${basePath}/website/element-ui/element-ui.min.css" rel="stylesheet">
+    <script src="${basePath}/website/vue/vue-2.5.10.min.js"></script>
+    <script src="${basePath}/website/element-ui/element-ui.min.js"></script>
 
     <!-- 使用 jQuery 操作，让菜单栏始终悬浮出现在屏幕上。 -->
-    <script src="/website/jquery/jquery-3.3.1.min.js"></script>
+    <script src="${basePath}/website/jquery/jquery-3.3.1.min.js"></script>
 
     <!--
             务必确保在 less.js 之前加载你的样式表。
             如果加载多个 .less 样式表文件，每个文件都会被单独编译。
             因此，一个文件中所定义的任何变量、mixin 或命名空间都无法在其它文件中访问。
     -->
-    <link href="/api2doc/css/home.less?v=${v}" rel="stylesheet/less" type="text/css">
-    <script src="/website/less/less-3.0.0.min.js" type="text/javascript"></script>
+    <link href="${basePath}/api2doc/css/home.less?v=${v}" rel="stylesheet/less" type="text/css">
+    <script src="${basePath}/website/less/less-3.0.0.min.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="app" class="doc-app" v-loading.fullscreen.lock="loading"
@@ -38,12 +38,11 @@
     <#if icon??>
         <div class="doc-icon">
             <img class="doc-icon-img" src="${icon}"
-                 onclick="location.href='/api2doc/home.html';">
+                 onclick="location.href='${basePath}/api2doc/home.html';">
         </div>
     </#if>
         <div class="doc-title">
             <span>${title}</span>
-            <a>aaa</a>
         </div>
         <div class="doc-end"></div>
     </div>
@@ -60,7 +59,7 @@
                         <template slot="title">${folder.name}</template>
                         <#list folder.children as doc>
                             <el-menu-item index="${doc.index}">
-                                <a href="${doc.url}" target="_self">${doc.name}</a>
+                                <a href="${basePath}${doc.url}" target="_self">${doc.name}</a>
                             </el-menu-item>
                         </#list>
                     </el-submenu>
@@ -76,7 +75,7 @@
         <div class="doc-content">
             <iframe id="doc-frame-id" name="doc-frame-name" class="doc-frame"
                     scrolling="yes" frameborder="0" seamless="seamless"
-                    src="${docPath}"></iframe>
+                    src="${basePath}${docPath}"></iframe>
         </div>
 
         <div class="doc-end"></div>

@@ -2,7 +2,8 @@ package com.terran4j.commons.api2doc.domain;
 
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.impl.FlexibleString;
-import com.terran4j.commons.util.Strings;
+import com.terran4j.commons.api2doc.other.utils.Strings;
+
 
 public class ApiObject implements Comparable<ApiObject>{
 

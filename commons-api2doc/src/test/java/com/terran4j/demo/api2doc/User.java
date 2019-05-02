@@ -1,9 +1,10 @@
 package com.terran4j.demo.api2doc;
 
 import com.terran4j.commons.api2doc.annotations.ApiComment;
-import com.terran4j.commons.restpack.RestPackIgnore;
+import com.terran4j.commons.api2doc.other.RestPackIgnore;
 
 import java.util.Date;
+
 @ApiComment(value = "用户表")
 public class User {
 

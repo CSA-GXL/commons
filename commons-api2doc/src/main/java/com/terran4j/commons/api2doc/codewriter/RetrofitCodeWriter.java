@@ -2,8 +2,8 @@ package com.terran4j.commons.api2doc.codewriter;
 
 import com.terran4j.commons.api2doc.domain.*;
 import com.terran4j.commons.api2doc.impl.ClasspathFreeMarker;
-import com.terran4j.commons.util.Classes;
-import com.terran4j.commons.util.value.KeyedList;
+import com.terran4j.commons.api2doc.other.utils.Classes;
+import com.terran4j.commons.api2doc.other.utils.KeyedList;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.apache.commons.collections4.map.HashedMap;

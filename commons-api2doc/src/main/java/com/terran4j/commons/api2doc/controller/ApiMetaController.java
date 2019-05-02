@@ -2,7 +2,7 @@ package com.terran4j.commons.api2doc.controller;
 
 import com.terran4j.commons.api2doc.meta.ApiMetaService;
 import com.terran4j.commons.api2doc.meta.ClassMeta;
-import com.terran4j.commons.restpack.RestPackController;
+import com.terran4j.commons.api2doc.other.RestPackController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

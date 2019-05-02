@@ -1,6 +1,6 @@
 package com.terran4j.commons.api2doc.domain;
 
-import com.terran4j.commons.util.value.KeyedList;
+import com.terran4j.commons.api2doc.other.utils.KeyedList;
 import org.springframework.util.StringUtils;
 
 import java.util.List;

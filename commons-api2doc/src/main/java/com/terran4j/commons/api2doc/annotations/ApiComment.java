@@ -22,6 +22,8 @@ public @interface ApiComment {
 
 	Class<?> seeClass() default Object.class;
 
+	Class<?>[] resultClass() default {Object.class};
+
 	String seeField() default "";
 
 }

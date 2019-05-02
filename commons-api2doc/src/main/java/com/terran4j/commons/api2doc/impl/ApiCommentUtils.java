@@ -2,13 +2,12 @@ package com.terran4j.commons.api2doc.impl;
 
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.api2doc.domain.ApiObject;
-import com.terran4j.commons.util.Classes;
+import com.terran4j.commons.api2doc.other.utils.Classes;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class ApiCommentUtils {
 

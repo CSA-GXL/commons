@@ -3,14 +3,9 @@ package com.terran4j.test.api2doc;
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.api2doc.domain.ApiDocObject;
-import com.terran4j.commons.api2doc.domain.ApiFolderObject;
-import com.terran4j.commons.api2doc.impl.Api2DocCollector;
 import com.terran4j.commons.api2doc.impl.CurlBuilder;
-import com.terran4j.commons.util.error.BusinessException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.bind.annotation.*;
 
 @Api2Doc(id = "curl")

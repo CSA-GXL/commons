@@ -1,11 +1,10 @@
 package com.terran4j.commons.api2doc.impl;
 
-import com.terran4j.commons.api2doc.Api2DocMocker;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.api2doc.domain.ApiDataType;
 import com.terran4j.commons.api2doc.domain.DateConverter;
-import com.terran4j.commons.util.Classes;
-import com.terran4j.commons.util.Enums;
+import com.terran4j.commons.api2doc.other.utils.Classes;
+import com.terran4j.commons.api2doc.other.utils.Enums;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,10 @@ import org.springframework.util.StringUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Stack;
 
 /**
  * 根据类上的 Api2Doc 注解信息，创建 JavaBean、数组、列表等对象。
@@ -94,6 +96,7 @@ public class Api2DocObjectFactory {
      * 如果是 简单类型 对象，就创建符合这个类型的值。
      *
      * @param clazz 数据对象的类型。
+     *
      * @return 填充后的数据对象。
      */
     private static <T> T createBean(Class<T> clazz, String defaultValue, Stack<Class<?>> classStack) {

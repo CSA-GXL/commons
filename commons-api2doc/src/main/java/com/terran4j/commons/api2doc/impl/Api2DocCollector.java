@@ -5,10 +5,9 @@ import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.api2doc.annotations.ApiError;
 import com.terran4j.commons.api2doc.annotations.ApiErrors;
 import com.terran4j.commons.api2doc.domain.*;
-import com.terran4j.commons.restpack.RestPackController;
-import com.terran4j.commons.util.Classes;
-import com.terran4j.commons.util.error.BusinessException;
-import com.terran4j.commons.util.value.KeyedList;
+import com.terran4j.commons.api2doc.other.RestPackController;
+import com.terran4j.commons.api2doc.other.utils.Classes;
+import com.terran4j.commons.api2doc.other.utils.KeyedList;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +47,7 @@ public class Api2DocCollector implements BeanPostProcessor {
         ApiFolderObject folder;
         try {
             folder = toApiFolder(bean, beanName);
-        } catch (BusinessException e) {
+        } catch (Exception e) {
             throw new BeanDefinitionStoreException(
                     "bean上的文档信息定义出错：" + e.getMessage());
         }
@@ -82,7 +81,7 @@ public class Api2DocCollector implements BeanPostProcessor {
      * @param beanName
      * @return
      */
-    public ApiFolderObject toApiFolder(Object bean, String beanName) throws BusinessException {
+    public ApiFolderObject toApiFolder(Object bean, String beanName)  {
 
         Class<?> clazz = Classes.getTargetClass(bean);
         Controller controller = AnnotationUtils.findAnnotation(clazz, Controller.class);
@@ -231,7 +230,7 @@ public class Api2DocCollector implements BeanPostProcessor {
     ApiDocObject getApiDoc(
             MappingMethod mappingMethod, String[] basePaths,
             String beanName, Api2Doc classApi2Doc,
-            Class<?> defaultSeeClass) throws BusinessException {
+            Class<?> defaultSeeClass)  {
 
         Method method = mappingMethod.getMethod();
         if ("UserController".equalsIgnoreCase(beanName)) {
@@ -253,9 +252,7 @@ public class Api2DocCollector implements BeanPostProcessor {
 
         // 获取文档的 id，以 @Api2Doc、方法名 为顺序获取。
         String id = method.getName();
-        if ("responseBody".equalsIgnoreCase(id)) {
-            System.out.println("---");
-        }
+
         if (api2Doc != null && StringUtils.hasText(api2Doc.value())) {
             id = api2Doc.value();
         }
@@ -304,7 +301,9 @@ public class Api2DocCollector implements BeanPostProcessor {
                 doc.addParam(apiParam);
             }
         }
-
+        if ("responseBody".equalsIgnoreCase(id)) {
+            System.out.println("---");
+        }
         // 收集返回值信息。
         KeyedList<String, ApiResultObject> totalResults = new KeyedList<>();
         ApiResultObject resultObject = ApiResultObject.parseResultType(method, totalResults);
@@ -477,7 +476,7 @@ public class Api2DocCollector implements BeanPostProcessor {
 
         String comment = errorCode.comment();
         if (comment == null) {
-            comment = BusinessException.getMessage(code);
+            comment = errorCode.comment();
         }
         if (comment == null) {
             comment = "";

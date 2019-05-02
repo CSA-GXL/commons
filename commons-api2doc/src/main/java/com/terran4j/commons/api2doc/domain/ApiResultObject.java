@@ -4,9 +4,11 @@ import com.terran4j.commons.api2doc.annotations.Api2Doc;
 import com.terran4j.commons.api2doc.annotations.ApiComment;
 import com.terran4j.commons.api2doc.impl.Api2DocUtils;
 import com.terran4j.commons.api2doc.impl.ApiCommentUtils;
-import com.terran4j.commons.util.Classes;
-import com.terran4j.commons.util.value.KeyedList;
+import com.terran4j.commons.api2doc.other.utils.Arrays;
+import com.terran4j.commons.api2doc.other.utils.Classes;
+import com.terran4j.commons.api2doc.other.utils.KeyedList;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.mockito.internal.util.collections.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -14,10 +16,9 @@ import org.springframework.util.StringUtils;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.*;
 
 /**
  * 记录所有的结果字段，它是一个复合型
@@ -166,6 +167,7 @@ public class ApiResultObject extends ApiObject {
      *
      * @param method
      * @param totalResults
+     *
      * @return
      */
     public static final ApiResultObject parseResultType(
@@ -233,9 +235,31 @@ public class ApiResultObject extends ApiObject {
 
         // 没有子类型，直接返回。
         PropertyDescriptor[] props = PropertyUtils.getPropertyDescriptors(elementType);
+
         if (props == null || props.length == 0) {
             return result;
         }
+        //判断是否有泛型
+        Type genericReturnType = method.getGenericReturnType();
+        Map<Class<?>, PropertyDescriptor[]> propMap = new HashMap<>();
+        propMap.put(elementType, props);
+        if (genericReturnType instanceof ParameterizedType) {
+            Type[] actualTypeArguments = ((ParameterizedType) genericReturnType).getActualTypeArguments();
+            for (Type type2 : actualTypeArguments) {
+                PropertyDescriptor[] temp = PropertyUtils.getPropertyDescriptors((Class<?>) type2);
+                if (temp != null && temp.length != 0) {
+                    //存储
+                    propMap.put((Class<?>) type2, temp);
+                }
+            }
+        }
+        ApiComment annotation = method.getAnnotation(ApiComment.class);
+        if (annotation != null) {
+            for (Class<?> resultClass : annotation.resultClass()) {
+                propMap.put(resultClass, PropertyUtils.getPropertyDescriptors(resultClass));
+            }
+        }
+
 
         // 根据类型生成字段集的 id 和 name 。
         String groupId = getGroupId(elementType);
@@ -249,93 +273,98 @@ public class ApiResultObject extends ApiObject {
         } else {
             totalResults.add(groupId, result);
         }
+        for (Map.Entry<Class<?>, PropertyDescriptor[]> propsEntry : propMap.entrySet()) {
 
-        // 有子类型，补充子类型信息。
-        for (PropertyDescriptor prop : props) {
-            if (Api2DocUtils.isFilter(prop, elementType)) {
-                continue;
-            }
-
-            String fieldName = prop.getName();
-            Method subMethod = prop.getReadMethod();
-
-            // 处理子类型。
-            ApiResultObject childPropResult;
-            try {
-                childPropResult = parseResultType(subMethod, totalResults);
-            } catch (Exception e) {
-                String msg = String.format("解析类[ %s ]的属性[ %s ]出错： %s",
-                        elementType.getName(), fieldName, e.getMessage());
-                throw new RuntimeException(msg);
-            }
-
-            // 补充子类型信息。
-            if (childPropResult != null) {
-
-                // 补充到当前节点中。
-                result.addChild(childPropResult);
-
-                String id = prop.getName();
-                childPropResult.setId(id);
-                childPropResult.setName(id);
-
-                Class<?> childPropClass = subMethod.getReturnType();
-                ApiDataType childPropDataType = ApiDataType.toDataType(childPropClass);
-                childPropResult.setDataType(childPropDataType);
-
-                Api2Doc childApi2Doc;
-                ApiComment childApiComment;
-                String childName;
-                Field field = Classes.getField(id, elementType);
-                if (field != null) {
-                    childApiComment = field.getAnnotation(ApiComment.class);
-                    childApi2Doc = field.getAnnotation(Api2Doc.class);
-                    childName = field.getName();
-                } else {
-                    childApiComment = subMethod.getAnnotation(ApiComment.class);
-                    childApi2Doc = subMethod.getAnnotation(Api2Doc.class);
-                    childName = subMethod.getName();
+            // 有子类型，补充子类型信息。
+            for (PropertyDescriptor prop : propsEntry.getValue()) {
+                if (Api2DocUtils.isFilter(prop, propsEntry.getKey())) {
+                    continue;
                 }
 
-                ApiComment elementApiComment = elementType
-                        .getAnnotation(ApiComment.class);
-                Class<?> defaultSeeClass = ApiCommentUtils
-                        .getDefaultSeeClass(elementApiComment, null);
+                String fieldName = prop.getName();
+                Method subMethod = prop.getReadMethod();
+                Type genericReturnType1 = subMethod.getGenericReturnType();
 
-                String comment = ApiCommentUtils.getComment(
-                        childApiComment, defaultSeeClass, childName);
-                if (comment == null) {
-                    comment = "";
+                if (genericReturnType1 instanceof ParameterizedType) {
+                    System.out.println(((ParameterizedType) genericReturnType1).getActualTypeArguments());
                 }
-                childPropResult.insertComment(comment);
-
-                String sample = ApiCommentUtils.getSample(
-                        childApiComment, defaultSeeClass, childName);
-                if (sample == null) {
-                    sample = "";
-                }
-                childPropResult.setSample(sample);
-
-                if (childApi2Doc != null) {
-                    childPropResult.setOrder(childApi2Doc.order());
+                // 处理子类型。
+                ApiResultObject childPropResult;
+                try {
+                    childPropResult = parseResultType(subMethod, totalResults);
+                } catch (Exception e) {
+                    String msg = String.format("解析类[ %s ]的属性[ %s ]出错： %s",
+                            propsEntry.getKey().getName(), fieldName, e.getMessage());
+                    throw new RuntimeException(msg);
                 }
 
-                // 记录所引用的类型。
-                Class<?> childSubType = null;
-                if (childPropDataType != null) {
-                    if (childPropDataType.isArrayType()) {
-                        childSubType = Api2DocUtils.getArrayElementClass(subMethod);
-                    } else if (childPropDataType.isObjectType()) {
-                        childSubType = subMethod.getReturnType();
+                // 补充子类型信息。
+                if (childPropResult != null) {
+
+                    // 补充到当前节点中。
+                    result.addChild(childPropResult);
+
+                    String id = prop.getName();
+                    childPropResult.setId(id);
+                    childPropResult.setName(id);
+
+                    Class<?> childPropClass = subMethod.getReturnType();
+                    ApiDataType childPropDataType = ApiDataType.toDataType(childPropClass);
+                    childPropResult.setDataType(childPropDataType);
+
+                    Api2Doc childApi2Doc;
+                    ApiComment childApiComment;
+                    String childName;
+                    Field field = Classes.getField(id, propsEntry.getKey());
+                    if (field != null) {
+                        childApiComment = field.getAnnotation(ApiComment.class);
+                        childApi2Doc = field.getAnnotation(Api2Doc.class);
+                        childName = field.getName();
+                    } else {
+                        childApiComment = subMethod.getAnnotation(ApiComment.class);
+                        childApi2Doc = subMethod.getAnnotation(Api2Doc.class);
+                        childName = subMethod.getName();
                     }
-                }
-                if (childSubType != null) {
-                    String refGroupId = getGroupId(childSubType);
-                    childPropResult.setRefGroupId(refGroupId);
+
+                    ApiComment elementApiComment = propsEntry.getKey()
+                            .getAnnotation(ApiComment.class);
+                    Class<?> defaultSeeClass = ApiCommentUtils
+                            .getDefaultSeeClass(elementApiComment, null);
+
+                    String comment = ApiCommentUtils.getComment(
+                            childApiComment, defaultSeeClass, childName);
+                    if (comment == null) {
+                        comment = "";
+                    }
+                    childPropResult.insertComment(comment);
+
+                    String sample = ApiCommentUtils.getSample(
+                            childApiComment, defaultSeeClass, childName);
+                    if (sample == null) {
+                        sample = "";
+                    }
+                    childPropResult.setSample(sample);
+
+                    if (childApi2Doc != null) {
+                        childPropResult.setOrder(childApi2Doc.order());
+                    }
+
+                    // 记录所引用的类型。
+                    Class<?> childSubType = null;
+                    if (childPropDataType != null) {
+                        if (childPropDataType.isArrayType()) {
+                            childSubType = Api2DocUtils.getArrayElementClass(subMethod);
+                        } else if (childPropDataType.isObjectType()) {
+                            childSubType = subMethod.getReturnType();
+                        }
+                    }
+                    if (childSubType != null) {
+                        String refGroupId = getGroupId(childSubType);
+                        childPropResult.setRefGroupId(refGroupId);
+                    }
                 }
             }
         }
-
         Collections.sort(result.getChildren());
 
         return result;

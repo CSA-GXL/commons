@@ -63,9 +63,10 @@ public class UserController {
             value = "/user/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") Long id) {
     }
-    @ApiComment(value = "根据requestBody 查询时间",seeClass = User.class)
+    @ApiComment(value = "根据requestBody 查询时间",seeClass = User.class,resultClass = User2.class)
     @PostMapping(value = "/user/body")
-    public User responseBody(@RequestBody User user) {
+    public ApiResultBean<User> responseBody(@RequestBody User user) {
+
         return null;
     }
 

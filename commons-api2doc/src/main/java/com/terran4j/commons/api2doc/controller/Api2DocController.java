@@ -55,6 +55,7 @@ public class Api2DocController {
             title = "Api2Doc 接口文档";
         }
         model.put("title", title);
+        model.put("basePath", api2DocProperties.getApi2docBasePath());
 
         String icon = api2DocProperties.getApi2docIcon();
         if (StringUtils.hasText(icon)) {
@@ -105,7 +106,7 @@ public class Api2DocController {
     @RequestMapping(value = "/welcome.html", method = RequestMethod.GET)
     public String welcome(Map<String, Object> model) throws Exception {
         String md = docPageBuilder.loadMdFromResource("welcome.md");
-        return md2HtmlPage(md, null, model);
+        return md2HtmlPage(md, null, model,api2DocProperties.getApi2docBasePath());
     }
 
     /**
@@ -116,7 +117,7 @@ public class Api2DocController {
                      @PathVariable("docId") String docId,
                      Map<String, Object> model) throws Exception {
         String md = docPageBuilder.loadMdFromResource(folderId, docId);
-        return md2HtmlPage(md, null, model);
+        return md2HtmlPage(md, null, model,api2DocProperties.getApi2docBasePath());
     }
 
     @RequestMapping(value = "/api/{fid}/{id}.html", method = RequestMethod.GET)
@@ -126,7 +127,7 @@ public class Api2DocController {
         ApiDocObject doc = apiDocService.getDocObject(folderId, id);
         String md = docPageBuilder.doc2Md(doc);
         String title = doc.getName();
-        return md2HtmlPage(md, title, model);
+        return md2HtmlPage(md, title, model,api2DocProperties.getApi2docBasePath());
     }
 
     @RequestMapping(value = "/test/{fid}/{id}.html", method = RequestMethod.GET)
@@ -142,12 +143,13 @@ public class Api2DocController {
     }
 
     public String md2HtmlPage(String md, String title,
-                              Map<String, Object> model) throws Exception {
+                              Map<String, Object> model,String basePath) throws Exception {
         if (title != null) {
             model.put("title", title);
         }
         String html = docPageBuilder.md2Html(md);
         model.put("content", html);
+        model.put("basePath", basePath);
 
         model.put("v", apiDocService.getComponentVersion());
 

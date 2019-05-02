@@ -20,6 +20,8 @@ public class Api2DocProperties {
 
     @Value("${api2doc.icon:}")
     private String api2docIcon;
+    @Value("${api2doc.basepath:}")
+    private String api2docBasePath;
 
     public String getServerURL() {
         return serverURL;
@@ -39,5 +41,9 @@ public class Api2DocProperties {
 
     public String getApi2docIcon() {
         return api2docIcon;
+    }
+
+    public String getApi2docBasePath() {
+        return api2docBasePath;
     }
 }

@@ -1,11 +1,11 @@
 package com.terran4j.commons.api2doc.controller;
 
 import com.terran4j.commons.api2doc.annotations.Api2Doc;
-import com.terran4j.commons.util.Strings;
+import com.terran4j.commons.api2doc.other.utils.Strings;
 
 import java.util.List;
 
-public class MenuData implements Comparable<MenuData>{
+public class MenuData implements Comparable<MenuData> {
 
     private boolean folder;
 
@@ -82,7 +82,7 @@ public class MenuData implements Comparable<MenuData>{
     }
 
     @Override
-    public int compareTo( MenuData other) {
+    public int compareTo(MenuData other) {
         MenuData o1 = this;
         MenuData o2 = other;
 

@@ -2,9 +2,8 @@ package com.terran4j.commons.api2doc.impl;
 
 import com.terran4j.commons.api2doc.domain.ApiDocObject;
 import com.terran4j.commons.api2doc.domain.ApiFolderObject;
-import com.terran4j.commons.restpack.HttpResult;
-import com.terran4j.commons.restpack.config.RestPackConfiguration;
-import com.terran4j.commons.util.Strings;
+import com.terran4j.commons.api2doc.other.HttpResult;
+import com.terran4j.commons.api2doc.other.utils.Strings;
 import com.vladsch.flexmark.ast.Node;
 import com.vladsch.flexmark.ext.spec.example.SpecExampleExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
@@ -146,11 +145,9 @@ public class DocPageBuilder {
                 mockResult = HttpResult.successFully(mockResult);
             }
             if (mockResult != null) {
-                String resultJson = RestPackConfiguration.getObjectMapper()
-                        .writeValueAsString(mockResult);
-                if (StringUtils.hasText(resultJson)) {
-                    model.put("resultJson", resultJson);
-                }
+//                String resultJson = RestPackConfiguration.getObjectMapper()
+//                        .writeValueAsString(mockResult);
+                model.put("resultJson", mockResult);
             }
 
             String folderId = folder.getId();

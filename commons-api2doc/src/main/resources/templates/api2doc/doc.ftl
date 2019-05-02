@@ -11,7 +11,7 @@
     -->
     <meta charset="UTF-8" name="viewport"
           content="width=device-width,initial-scale=1,user-scalable=0"/>
-    <script src="/website/flexible-lite/flexible-lite-1.0.js"></script>
+    <script src="${basePath}/website/flexible-lite/flexible-lite-1.0.js"></script>
     <script type="text/javascript">
         flex(1000);
     </script>
@@ -20,9 +20,9 @@
             如果加载多个 .less 样式表文件，每个文件都会被单独编译。
             因此，一个文件中所定义的任何变量、mixin 或命名空间都无法在其它文件中访问。
     -->
-    <link rel="stylesheet/less" type="text/css" href="/api2doc/css/doc.less?v=${v}">
-    <link rel="stylesheet/less" type="text/css" href="/api2doc/css/md.less?v=${v}">
-    <script type="text/javascript" src="/website/less/less-1.7.0.js"></script>
+    <link rel="stylesheet/less" type="text/css" href="${basePath}/api2doc/css/doc.less?v=${v}">
+    <link rel="stylesheet/less" type="text/css" href="${basePath}/api2doc/css/md.less?v=${v}">
+    <script type="text/javascript" src="${basePath}/website/less/less-1.7.0.js"></script>
 
     <!-- 使代码根据语法显示样式（如：高亮等） -->
     <link rel="stylesheet"

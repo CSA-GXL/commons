@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.github.terran4j</groupId>
 		<artifactId>terran4j-commons-parent</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.2</version>
 	</parent>
 
 	<artifactId>terran4j-commons-api2doc</artifactId>
@@ -40,18 +40,18 @@
 		</dependency>
 
 		<!-- terran4j 工具类库。 -->
-		<dependency>
-			<groupId>com.github.terran4j</groupId>
-			<artifactId>terran4j-commons-util</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.github.terran4j</groupId>
-			<artifactId>terran4j-commons-website</artifactId>
-		</dependency>
-        <dependency>
-            <groupId>com.github.terran4j</groupId>
-            <artifactId>terran4j-commons-restpack</artifactId>
-        </dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.github.terran4j</groupId>-->
+			<!--<artifactId>terran4j-commons-util</artifactId>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>com.github.terran4j</groupId>-->
+			<!--<artifactId>terran4j-commons-website</artifactId>-->
+		<!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.terran4j</groupId>-->
+            <!--<artifactId>terran4j-commons-restpack</artifactId>-->
+        <!--</dependency>-->
 
 		<!-- aspectj -->
 		<dependency>
@@ -80,6 +80,24 @@
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jsonSchema</artifactId>
 		</dependency>
-    </dependencies>
 
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+		</dependency>
+
+    </dependencies>
 </project>
